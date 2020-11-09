@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    tier: scheduler
+  name: scheduler
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        tier: scheduler
+    spec:
+      containers:
+      - args:
+        - scheduler
+        env:
+        - name: EXECUTOR
+          value: Celery
+        - name: FERNET_KEY
+          value: 46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+        - name: LOAD_EX
+          value: "n"
+        image: chiju/airflow
+        name: scheduler
+        volumeMounts:
+        - mountPath: /usr/local/airflow/dags
+          name: config-volume
+      restartPolicy: Always
+      volumes:
+      - name: config-volume
+        configMap:
+          name: airflow.cfg

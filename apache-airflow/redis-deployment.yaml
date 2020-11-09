@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    tier: redis
+    app: airflow
+  name: redis
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        tier: redis
+        app: airflow
+    spec:
+      containers:
+      - image: redis:5
+        name: redis
+      restartPolicy: Always

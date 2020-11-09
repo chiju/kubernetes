@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    tier: postgres
+    app: airflow
+  name: postgres
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        tier: postgres
+        app: airflow
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          value: airflow
+        - name: POSTGRES_PASSWORD
+          value: airflow
+        - name: POSTGRES_USER
+          value: airflow
+        image: postgres:11
+        name: postgres
+      restartPolicy: Always

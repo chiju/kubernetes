@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    tier: worker
+    app: airflow
+  name: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: worker
+      app: airflow
+  serviceName: worker
+  template:
+    metadata:
+      labels:
+        tier: worker
+        app: airflow
+    spec:
+      #hostname: worker
+      containers:
+      - args:
+        - worker
+        env:
+        - name: EXECUTOR
+          value: Celery
+        - name: FERNET_KEY
+          value: 46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+        image: chiju/airflow
+        name: worker
+        ports:
+        - containerPort: 8793
+        resources: {}
+        volumeMounts:
+        - mountPath: /usr/local/airflow/dags
+          name: config-volume
+      restartPolicy: Always
+      volumes:
+      - name: config-volume
+        configMap:
+          name: airflow.cfg

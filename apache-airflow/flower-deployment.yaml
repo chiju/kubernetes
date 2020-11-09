@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    tier: flower
+    app: airflow
+  name: flower
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        tier: flower
+        app: airflow
+    spec:
+      containers:
+      - args:
+        - flower
+        env:
+        - name: EXECUTOR
+          value: Celery
+        image: chiju/airflow
+        name: flower
+        ports:
+        - containerPort: 5555
+        volumeMounts:
+        - mountPath: /usr/local/airflow/airflow.cfg
+          name: config-volume
+          subPath: airflow.cfg
+      restartPolicy: Always
+      volumes:
+      - name: config-volume
+        configMap:
+          name: airflow.cfg
+

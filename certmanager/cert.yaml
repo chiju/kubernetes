@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: xyz-tk
+spec:
+  secretName: xyz-tk-tls
+  issuerRef:
+    name: letsencrypt
+  commonName: '*.xyz.tk'
+  dnsNames:
+  - '*.xyz.tk'
